@@ -1,0 +1,25 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+import en from './locales/en.json';
+import ro from './locales/ro.json';
+import fr from './locales/fr.json';
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'en',
+    debug: false,
+    resources: {
+      en: { translation: en },
+      ro: { translation: ro },
+      fr: { translation: fr }
+    },
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
+export default i18n;
