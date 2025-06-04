@@ -40,33 +40,31 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="auth-container">
+      <div className="auth-card">
         {/* Header */}
-        <div className="text-center">
-          <div className="w-16 h-16 bg-hotel-gold rounded-full flex items-center justify-center mx-auto mb-4">
-            <UserPlus className="w-8 h-8 text-hotel-navy" />
+        <div className="auth-header">
+          <div className="auth-icon">
+            <UserPlus className="w-8 h-8" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="auth-title">
             {t('auth.register')}
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="auth-subtitle">
             Create your account to get started
           </p>
         </div>
 
         {/* Registration Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4">
+        <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-6">
             {/* Username */}
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">
                 {t('auth.username')} *
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="input-icon">
+                <User className="icon" />
                 <input
                   {...register('username', {
                     required: 'Username is required',
@@ -80,26 +78,22 @@ const Register = () => {
                     }
                   })}
                   type="text"
-                  className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.username ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`form-input ${errors.username ? 'error' : ''}`}
                   placeholder="Choose a username"
                 />
               </div>
               {errors.username && (
-                <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
+                <p className="form-error">{errors.username.message}</p>
               )}
             </div>
 
             {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
                 {t('auth.email')} *
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="input-icon">
+                <Mail className="icon" />
                 <input
                   {...register('email', {
                     required: 'Email is required',
@@ -109,26 +103,22 @@ const Register = () => {
                     }
                   })}
                   type="email"
-                  className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.email ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`form-input ${errors.email ? 'error' : ''}`}
                   placeholder="Enter your email"
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                <p className="form-error">{errors.email.message}</p>
               )}
             </div>
 
             {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
                 {t('auth.password')} *
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="input-icon input-icon-right">
+                <Lock className="icon" style={{ left: 'var(--space-3)' }} />
                 <input
                   {...register('password', {
                     required: 'Password is required',
@@ -138,89 +128,90 @@ const Register = () => {
                     }
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  className={`block w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`form-input ${errors.password ? 'error' : ''}`}
                   placeholder="Create a password"
+                  style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="icon"
+                  style={{ 
+                    right: 'var(--space-3)', 
+                    left: 'auto',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--gray-400)'
+                  }}
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <EyeOff className="w-5 h-5" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <Eye className="w-5 h-5" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="form-error">{errors.password.message}</p>
               )}
             </div>
 
             {/* Confirm Password */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="confirmPassword" className="form-label">
                 Confirm Password *
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="input-icon">
+                <Lock className="icon" />
                 <input
                   {...register('confirmPassword', {
                     required: 'Please confirm your password',
                     validate: value => value === password || 'Passwords do not match'
                   })}
                   type="password"
-                  className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
                   placeholder="Confirm your password"
                 />
               </div>
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                <p className="form-error">{errors.confirmPassword.message}</p>
               )}
             </div>
 
             {/* First Name */}
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="firstName" className="form-label">
                 {t('auth.firstName')}
               </label>
               <input
                 {...register('firstName')}
                 type="text"
-                className="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
                 placeholder="Enter your first name"
               />
             </div>
 
             {/* Last Name */}
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="lastName" className="form-label">
                 {t('auth.lastName')}
               </label>
               <input
                 {...register('lastName')}
                 type="text"
-                className="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="form-input"
                 placeholder="Enter your last name"
               />
             </div>
 
             {/* Phone Number */}
-            <div>
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="phoneNumber" className="form-label">
                 {t('auth.phoneNumber')}
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="input-icon">
+                <Phone className="icon" />
                 <input
                   {...register('phoneNumber', {
                     pattern: {
@@ -229,27 +220,23 @@ const Register = () => {
                     }
                   })}
                   type="tel"
-                  className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.phoneNumber ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`form-input ${errors.phoneNumber ? 'error' : ''}`}
                   placeholder="+1234567890"
                 />
               </div>
               {errors.phoneNumber && (
-                <p className="mt-1 text-sm text-red-600">{errors.phoneNumber.message}</p>
+                <p className="form-error">{errors.phoneNumber.message}</p>
               )}
             </div>
 
             {/* User Type */}
-            <div>
-              <label htmlFor="userType" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="userType" className="form-label">
                 {t('auth.userType')} *
               </label>
               <select
                 {...register('userType', { required: 'User type is required' })}
-                className={`block w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.userType ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`form-select ${errors.userType ? 'error' : ''}`}
               >
                 <option value="CLIENT">Client</option>
                 <option value="EMPLOYEE">Employee</option>
@@ -257,30 +244,26 @@ const Register = () => {
                 <option value="ADMINISTRATOR">Administrator</option>
               </select>
               {errors.userType && (
-                <p className="mt-1 text-sm text-red-600">{errors.userType.message}</p>
+                <p className="form-error">{errors.userType.message}</p>
               )}
             </div>
           </div>
 
           {/* Submit Button */}
-          <div>
+          <div style={{ marginTop: 'var(--space-8)' }}>
             <button
               type="submit"
               disabled={isLoading}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                isLoading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-hotel-navy hover:bg-blue-800'
-              } transition-colors`}
+              className="auth-submit"
             >
               {isLoading ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                <div className="auth-loading">
+                  <div className="spinner"></div>
                   Creating account...
                 </div>
               ) : (
-                <div className="flex items-center">
-                  <UserPlus className="w-5 h-5 mr-2" />
+                <div className="auth-loading">
+                  <UserPlus className="w-5 h-5" />
                   {t('auth.register')}
                 </div>
               )}
@@ -288,12 +271,12 @@ const Register = () => {
           </div>
 
           {/* Links */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
+          <div className="auth-links">
+            <p className="text-sm text-secondary">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                className="auth-link"
               >
                 {t('auth.login')}
               </Link>

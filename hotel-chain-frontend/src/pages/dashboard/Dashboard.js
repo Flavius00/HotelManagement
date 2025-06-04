@@ -82,35 +82,35 @@ const Dashboard = () => {
     todayCheckIns: 8
   };
 
-  const StatCard = ({ title, value, icon: Icon, trend, trendValue, color = 'blue' }) => {
-    const colorClasses = {
-      blue: 'bg-blue-50 text-blue-600',
-      green: 'bg-green-50 text-green-600',
-      yellow: 'bg-yellow-50 text-yellow-600',
-      red: 'bg-red-50 text-red-600'
+  const StatCard = ({ title, value, icon: Icon, trend, trendValue, color = 'ocean' }) => {
+    const iconColors = {
+      ocean: 'bg-ocean',
+      coral: 'bg-coral',
+      success: 'bg-success',
+      warning: 'bg-warning'
     };
 
     return (
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex items-center justify-between">
+      <div className="stat-card">
+        <div className="stat-card-header">
           <div>
-            <p className="text-sm font-medium text-gray-600">{title}</p>
-            <p className="text-2xl font-bold text-gray-900">{value}</p>
+            <p className="stat-card-label">{title}</p>
+            <p className="stat-card-value">{value}</p>
             {trend && (
-              <div className="flex items-center mt-1">
+              <div className="stat-card-trend">
                 {trend === 'up' ? (
-                  <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                  <TrendingUp className="w-4 h-4 trend-up" />
                 ) : (
-                  <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
+                  <TrendingDown className="w-4 h-4 trend-down" />
                 )}
-                <span className={`text-sm ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={trend === 'up' ? 'trend-up' : 'trend-down'}>
                   {trendValue}%
                 </span>
               </div>
             )}
           </div>
-          <div className={`p-3 rounded-full ${colorClasses[color]}`}>
-            <Icon className="w-6 h-6" />
+          <div className={`stat-card-icon ${iconColors[color]}`}>
+            <Icon className="w-6 h-6 text-white" />
           </div>
         </div>
       </div>
@@ -119,54 +119,56 @@ const Dashboard = () => {
 
   if (dashboardLoading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
+      <div className="flex items-center justify-center" style={{ minHeight: '16rem' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+          <div className="spinner spinner-lg"></div>
+          <p className="mt-4 text-secondary">{t('common.loading')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="dashboard-container">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</h1>
-          <p className="mt-1 text-gray-600">
-            Welcome back, {currentUser?.firstName || currentUser?.username}
-          </p>
-        </div>
-        
-        <div className="mt-4 sm:mt-0 flex items-center space-x-4">
-          <select
-            value={timeRange}
-            onChange={(e) => setTimeRange(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="7">Last 7 days</option>
-            <option value="30">Last 30 days</option>
-            <option value="90">Last 3 months</option>
-            <option value="365">Last year</option>
-          </select>
+      <div className="dashboard-header">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="dashboard-title">{t('dashboard.title')}</h1>
+            <p className="dashboard-subtitle">
+              Welcome back, {currentUser?.firstName || currentUser?.username}
+            </p>
+          </div>
           
-          <button className="bg-hotel-navy text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors inline-flex items-center">
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
-          </button>
+          <div className="mt-4 sm:mt-0 flex items-center space-x-4">
+            <select
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="form-select"
+            >
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 3 months</option>
+              <option value="365">Last year</option>
+            </select>
+            
+            <button className="btn btn-primary">
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="stats-cards">
         <StatCard
           title="Total Users"
           value={stats.totalUsers.toLocaleString()}
           icon={Users}
           trend="up"
           trendValue="12"
-          color="blue"
+          color="ocean"
         />
         
         <StatCard
@@ -175,7 +177,7 @@ const Dashboard = () => {
           icon={Bed}
           trend="up"
           trendValue="5"
-          color="green"
+          color="success"
         />
         
         <StatCard
@@ -184,7 +186,7 @@ const Dashboard = () => {
           icon={Calendar}
           trend="up"
           trendValue="18"
-          color="yellow"
+          color="warning"
         />
         
         <StatCard
@@ -193,19 +195,19 @@ const Dashboard = () => {
           icon={DollarSign}
           trend="up"
           trendValue="25"
-          color="green"
+          color="success"
         />
       </div>
 
       {/* Additional Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="stats-cards">
         <StatCard
           title="Occupancy Rate"
           value={`${stats.occupancyRate}%`}
           icon={BarChart3}
           trend="up"
           trendValue="3"
-          color="blue"
+          color="ocean"
         />
         
         <StatCard
@@ -214,105 +216,163 @@ const Dashboard = () => {
           icon={TrendingUp}
           trend="up"
           trendValue="0.2"
-          color="green"
+          color="success"
         />
         
         <StatCard
           title="Pending Bookings"
           value={stats.pendingBookings}
           icon={AlertTriangle}
-          color="yellow"
+          color="warning"
         />
         
         <StatCard
           title="Today's Check-ins"
           value={stats.todayCheckIns}
           icon={UserCheck}
-          color="blue"
+          color="ocean"
         />
       </div>
 
       {/* Management Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Bookings */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Bookings</h3>
-            <button className="text-sm text-blue-600 hover:text-blue-700">
-              View All
-            </button>
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center justify-between">
+              <h3 className="card-title">Recent Bookings</h3>
+              <button className="text-sm text-ocean hover:text-coral">
+                View All
+              </button>
+            </div>
           </div>
           
-          <div className="space-y-3">
-            {[
-              { id: 1, room: '101', guest: 'John Doe', date: '2024-06-05', status: 'CONFIRMED' },
-              { id: 2, room: '205', guest: 'Jane Smith', date: '2024-06-06', status: 'PENDING' },
-              { id: 3, room: '302', guest: 'Mike Johnson', date: '2024-06-07', status: 'CONFIRMED' }
-            ].map((booking) => (
-              <div key={booking.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                  <div className="font-medium text-gray-900">Room {booking.room}</div>
-                  <div className="text-sm text-gray-600">{booking.guest}</div>
-                  <div className="text-xs text-gray-500">{booking.date}</div>
+          <div className="card-body">
+            <div className="space-y-3">
+              {[
+                { id: 1, room: '101', guest: 'John Doe', date: '2024-06-05', status: 'CONFIRMED' },
+                { id: 2, room: '205', guest: 'Jane Smith', date: '2024-06-06', status: 'PENDING' },
+                { id: 3, room: '302', guest: 'Mike Johnson', date: '2024-06-07', status: 'CONFIRMED' }
+              ].map((booking) => (
+                <div key={booking.id} className="list-item">
+                  <div className="list-item-avatar">
+                    {booking.guest.split(' ').map(n => n[0]).join('')}
+                  </div>
+                  <div className="list-item-content">
+                    <div className="list-item-title">Room {booking.room}</div>
+                    <div className="list-item-subtitle">{booking.guest}</div>
+                    <div className="text-xs text-light">{booking.date}</div>
+                  </div>
+                  <div className="list-item-meta">
+                    <div className={`badge ${
+                      booking.status === 'CONFIRMED' 
+                        ? 'badge-success' 
+                        : 'badge-warning'
+                    }`}>
+                      {booking.status}
+                    </div>
+                  </div>
                 </div>
-                <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  booking.status === 'CONFIRMED' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {booking.status}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">Quick Actions</h3>
+          </div>
           
-          <div className="space-y-3">
-            {canManageUsers() && (
-              <button className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                <div className="flex items-center">
-                  <Users className="w-5 h-5 text-blue-600 mr-3" />
-                  <span className="font-medium text-gray-900">Manage Users</span>
+          <div className="card-body">
+            <div className="space-y-3">
+              {canManageUsers() && (
+                <button className="w-full card hover-lift" style={{ cursor: 'pointer', border: 'none', background: 'none' }}>
+                  <div className="card-body">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-12 h-12 bg-ocean rounded-xl flex items-center justify-center mr-3">
+                          <Users className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-primary">Manage Users</div>
+                          <div className="text-sm text-secondary">Manage user accounts</div>
+                        </div>
+                      </div>
+                      <span className="badge badge-neutral">{stats.totalUsers} users</span>
+                    </div>
+                  </div>
+                </button>
+              )}
+              
+              {canManageRooms() && (
+                <button className="w-full card hover-lift" style={{ cursor: 'pointer', border: 'none', background: 'none' }}>
+                  <div className="card-body">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-12 h-12 bg-success rounded-xl flex items-center justify-center mr-3">
+                          <Bed className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-primary">Manage Rooms</div>
+                          <div className="text-sm text-secondary">Room management</div>
+                        </div>
+                      </div>
+                      <span className="badge badge-neutral">{stats.totalRooms} rooms</span>
+                    </div>
+                  </div>
+                </button>
+              )}
+              
+              <button className="w-full card hover-lift" style={{ cursor: 'pointer', border: 'none', background: 'none' }}>
+                <div className="card-body">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-warning rounded-xl flex items-center justify-center mr-3">
+                        <Calendar className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-primary">View Bookings</div>
+                        <div className="text-sm text-secondary">Booking management</div>
+                      </div>
+                    </div>
+                    <span className="badge badge-neutral">{stats.totalBookings} bookings</span>
+                  </div>
                 </div>
-                <span className="text-sm text-gray-500">{stats.totalUsers} users</span>
               </button>
-            )}
-            
-            {canManageRooms() && (
-              <button className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                <div className="flex items-center">
-                  <Bed className="w-5 h-5 text-green-600 mr-3" />
-                  <span className="font-medium text-gray-900">Manage Rooms</span>
+              
+              <button className="w-full card hover-lift" style={{ cursor: 'pointer', border: 'none', background: 'none' }}>
+                <div className="card-body">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-coral rounded-xl flex items-center justify-center mr-3">
+                        <Download className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-primary">Export Data</div>
+                        <div className="text-sm text-secondary">Download reports</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-sm text-gray-500">{stats.totalRooms} rooms</span>
               </button>
-            )}
-            
-            <button className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <div className="flex items-center">
-                <Calendar className="w-5 h-5 text-yellow-600 mr-3" />
-                <span className="font-medium text-gray-900">View Bookings</span>
-              </div>
-              <span className="text-sm text-gray-500">{stats.totalBookings} bookings</span>
-            </button>
-            
-            <button className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <div className="flex items-center">
-                <Download className="w-5 h-5 text-purple-600 mr-3" />
-                <span className="font-medium text-gray-900">Export Data</span>
-              </div>
-            </button>
-            
-            <button className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <div className="flex items-center">
-                <Settings className="w-5 h-5 text-gray-600 mr-3" />
-                <span className="font-medium text-gray-900">Settings</span>
-              </div>
-            </button>
+              
+              <button className="w-full card hover-lift" style={{ cursor: 'pointer', border: 'none', background: 'none' }}>
+                <div className="card-body">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-3">
+                        <Settings className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-primary">Settings</div>
+                        <div className="text-sm text-secondary">System configuration</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -321,39 +381,47 @@ const Dashboard = () => {
       {canViewStatistics() && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Revenue Chart Placeholder */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Revenue Trends</h3>
-              <select className="text-sm border border-gray-300 rounded px-2 py-1">
-                <option>Monthly</option>
-                <option>Weekly</option>
-                <option>Daily</option>
-              </select>
+          <div className="card">
+            <div className="card-header">
+              <div className="flex items-center justify-between">
+                <h3 className="card-title">Revenue Trends</h3>
+                <select className="form-select" style={{ minWidth: '120px' }}>
+                  <option>Monthly</option>
+                  <option>Weekly</option>
+                  <option>Daily</option>
+                </select>
+              </div>
             </div>
             
-            <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-500">Revenue chart will be displayed here</p>
-                <p className="text-sm text-gray-400">Integration with chart library needed</p>
+            <div className="card-body">
+              <div className="h-64 bg-secondary rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <BarChart3 className="w-12 h-12 text-light mx-auto mb-2" />
+                  <p className="text-light">Revenue chart will be displayed here</p>
+                  <p className="text-sm text-light">Integration with chart library needed</p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Occupancy Chart Placeholder */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Room Occupancy</h3>
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl font-bold text-blue-600">{stats.occupancyRate}%</span>
+          <div className="card">
+            <div className="card-header">
+              <div className="flex items-center justify-between">
+                <h3 className="card-title">Room Occupancy</h3>
+                <div className="flex items-center space-x-2">
+                  <span className="text-2xl font-bold text-ocean">{stats.occupancyRate}%</span>
+                </div>
               </div>
             </div>
             
-            <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <PieChart className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-500">Occupancy chart will be displayed here</p>
-                <p className="text-sm text-gray-400">Integration with chart library needed</p>
+            <div className="card-body">
+              <div className="h-64 bg-secondary rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <PieChart className="w-12 h-12 text-light mx-auto mb-2" />
+                  <p className="text-light">Occupancy chart will be displayed here</p>
+                  <p className="text-sm text-light">Integration with chart library needed</p>
+                </div>
               </div>
             </div>
           </div>
@@ -361,32 +429,36 @@ const Dashboard = () => {
       )}
 
       {/* System Status */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title">System Status</h3>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
-            <div>
-              <div className="font-medium text-green-900">API Gateway</div>
-              <div className="text-sm text-green-600">Operational</div>
+        <div className="card-body">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex items-center justify-between p-4 bg-success rounded-lg text-white">
+              <div>
+                <div className="font-medium">API Gateway</div>
+                <div className="text-sm opacity-90">Operational</div>
+              </div>
+              <div className="w-3 h-3 bg-white rounded-full"></div>
             </div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          </div>
-          
-          <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
-            <div>
-              <div className="font-medium text-green-900">Database</div>
-              <div className="text-sm text-green-600">Connected</div>
+            
+            <div className="flex items-center justify-between p-4 bg-success rounded-lg text-white">
+              <div>
+                <div className="font-medium">Database</div>
+                <div className="text-sm opacity-90">Connected</div>
+              </div>
+              <div className="w-3 h-3 bg-white rounded-full"></div>
             </div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          </div>
-          
-          <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
-            <div>
-              <div className="font-medium text-green-900">Services</div>
-              <div className="text-sm text-green-600">All running</div>
+            
+            <div className="flex items-center justify-between p-4 bg-success rounded-lg text-white">
+              <div>
+                <div className="font-medium">Services</div>
+                <div className="text-sm opacity-90">All running</div>
+              </div>
+              <div className="w-3 h-3 bg-white rounded-full"></div>
             </div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
           </div>
         </div>
       </div>

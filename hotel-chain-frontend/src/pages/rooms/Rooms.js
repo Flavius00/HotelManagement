@@ -99,10 +99,10 @@ const Rooms = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
+      <div className="flex items-center justify-center" style={{ minHeight: '16rem' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+          <div className="spinner spinner-lg"></div>
+          <p className="mt-4 text-secondary">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -111,10 +111,10 @@ const Rooms = () => {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600 mb-4">{t('common.error')}</p>
+        <p className="text-error mb-4">{t('common.error')}</p>
         <button 
           onClick={() => refetch()} 
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="btn btn-primary"
         >
           Try Again
         </button>
@@ -125,30 +125,26 @@ const Rooms = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('rooms.title')}</h1>
-          <p className="mt-1 text-gray-600">
+      <div className="rooms-header">
+        <div className="rooms-title-section">
+          <h1>{t('rooms.title')}</h1>
+          <p className="rooms-count">
             {filteredRooms.length} {filteredRooms.length === 1 ? 'room' : 'rooms'} available
           </p>
         </div>
         
-        <div className="mt-4 sm:mt-0 flex items-center space-x-4">
+        <div className="rooms-controls">
           {/* View Mode Toggle */}
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="view-toggle">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'grid' ? 'bg-white shadow-sm' : 'text-gray-500'
-              }`}
+              className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
             >
               <Grid className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'list' ? 'bg-white shadow-sm' : 'text-gray-500'
-              }`}
+              className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
             >
               <List className="w-4 h-4" />
             </button>
@@ -157,7 +153,7 @@ const Rooms = () => {
           {/* Filter Toggle */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center space-x-2 bg-hotel-navy text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors"
+            className="filter-toggle-btn"
           >
             <SlidersHorizontal className="w-4 h-4" />
             <span>Filters</span>
@@ -166,36 +162,36 @@ const Rooms = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-5 w-5 text-gray-400" />
+      <div className="search-container">
+        <div className="search-box">
+          <Search className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search rooms by location, hotel, or room number..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Search rooms by location, hotel, or room number..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        />
       </div>
 
       {/* Filters Panel */}
       {showFilters && (
-        <div className="bg-white p-6 rounded-lg shadow-lg border">
+        <div className="filter-panel">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">{t('rooms.filterBy')}</h3>
+            <h3 className="text-lg font-semibold text-primary">{t('rooms.filterBy')}</h3>
             <button
               onClick={clearFilters}
-              className="text-sm text-blue-600 hover:text-blue-700"
+              className="text-sm text-ocean hover:text-coral"
             >
               Clear All
             </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="form-row" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
             {/* Location Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label className="form-label">
                 {t('rooms.location')}
               </label>
               <input
@@ -203,19 +199,19 @@ const Rooms = () => {
                 value={filters.location}
                 onChange={(e) => handleFilterChange('location', e.target.value)}
                 placeholder="Enter location"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
 
             {/* Room Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label className="form-label">
                 Room Type
               </label>
               <select
                 value={filters.roomType}
                 onChange={(e) => handleFilterChange('roomType', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-select"
               >
                 <option value="">All Types</option>
                 {roomTypes.map(type => (
@@ -227,14 +223,14 @@ const Rooms = () => {
             </div>
 
             {/* Position Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label className="form-label">
                 {t('rooms.position')}
               </label>
               <select
                 value={filters.position}
                 onChange={(e) => handleFilterChange('position', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-select"
               >
                 <option value="">All Positions</option>
                 {positions.map(position => (
@@ -246,14 +242,14 @@ const Rooms = () => {
             </div>
 
             {/* Availability Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label className="form-label">
                 {t('rooms.availability')}
               </label>
               <select
                 value={filters.isAvailable === null ? '' : filters.isAvailable.toString()}
                 onChange={(e) => handleFilterChange('isAvailable', e.target.value === '' ? null : e.target.value === 'true')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-select"
               >
                 <option value="">All Rooms</option>
                 <option value="true">Available Only</option>
@@ -262,8 +258,8 @@ const Rooms = () => {
             </div>
 
             {/* Price Range */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label className="form-label">
                 Min Price ($)
               </label>
               <input
@@ -271,12 +267,12 @@ const Rooms = () => {
                 value={filters.minPrice}
                 onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                 placeholder="0"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label className="form-label">
                 Max Price ($)
               </label>
               <input
@@ -284,26 +280,22 @@ const Rooms = () => {
                 value={filters.maxPrice}
                 onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                 placeholder="1000"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="form-input"
               />
             </div>
           </div>
 
           {/* Facilities Filter */}
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="form-group">
+            <label className="form-label">
               {t('rooms.facilities')}
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="filter-tags">
               {commonFacilities.map(facility => (
                 <button
                   key={facility}
                   onClick={() => handleFacilityToggle(facility)}
-                  className={`px-3 py-1 rounded-full text-sm border transition-colors ${
-                    filters.facilities.includes(facility)
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-600'
-                  }`}
+                  className={`filter-tag ${filters.facilities.includes(facility) ? 'active' : ''}`}
                 >
                   {facility}
                 </button>
@@ -315,27 +307,23 @@ const Rooms = () => {
 
       {/* Rooms List */}
       {filteredRooms.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Search className="w-8 h-8 text-gray-400" />
+        <div className="no-results">
+          <div className="no-results-icon">
+            <Search className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No rooms found</h3>
-          <p className="text-gray-600 mb-4">
+          <h3>No rooms found</h3>
+          <p>
             Try adjusting your search criteria or filters
           </p>
           <button
             onClick={clearFilters}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="btn btn-primary"
           >
             Clear Filters
           </button>
         </div>
       ) : (
-        <div className={
-          viewMode === 'grid'
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-            : 'space-y-4'
-        }>
+        <div className={viewMode === 'grid' ? 'rooms-grid' : 'rooms-list'}>
           {filteredRooms.map((room) => (
             <RoomCard key={room.id} room={room} viewMode={viewMode} />
           ))}
@@ -354,75 +342,69 @@ const RoomCard = ({ room, viewMode }) => {
   
   if (viewMode === 'list') {
     return (
-      <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
-        <div className="flex">
-          <div className="w-48 h-32 flex-shrink-0">
-            <img
-              src={roomImage}
-              alt={`Room ${room.roomNumber}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex-1 p-4 flex flex-col justify-between">
-            <div>
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Room {room.roomNumber} - {room.roomType?.replace('_', ' ')}
-                  </h3>
-                  <p className="text-sm text-gray-600 flex items-center mt-1">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {room.hotel?.location || 'Location not specified'}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-gray-900">
-                    ${room.price}
-                    <span className="text-sm font-normal text-gray-600">/night</span>
-                  </div>
-                  <div className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                    room.isAvailable 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {room.isAvailable ? 'Available' : 'Unavailable'}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-2 flex items-center space-x-4 text-sm text-gray-600">
-                <span className="flex items-center">
-                  <Users className="w-4 h-4 mr-1" />
-                  Max {room.maxOccupancy} guests
-                </span>
-                <span>
-                  {room.position?.replace('_', ' ')}
-                </span>
-              </div>
-              
-              {room.description && (
-                <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                  {room.description}
+      <div className="room-card-list">
+        <div className="room-image-container">
+          <img
+            src={roomImage}
+            alt={`Room ${room.roomNumber}`}
+            className="room-image"
+          />
+        </div>
+        <div className="room-content">
+          <div>
+            <div className="room-header">
+              <div>
+                <h3 className="room-title">
+                  Room {room.roomNumber} - {room.roomType?.replace('_', ' ')}
+                </h3>
+                <p className="room-location">
+                  <MapPin className="w-4 h-4" />
+                  {room.hotel?.location || 'Location not specified'}
                 </p>
-              )}
+              </div>
+              <div className="room-price">
+                <div className="room-price-amount">
+                  ${room.price}
+                  <span className="room-price-period">/night</span>
+                </div>
+                <div className={`room-status-badge ${room.isAvailable ? 'room-status-available' : 'room-status-unavailable'}`}>
+                  {room.isAvailable ? 'Available' : 'Unavailable'}
+                </div>
+              </div>
             </div>
             
-            <div className="mt-4 flex justify-between items-center">
-              <div className="flex space-x-2">
-                {room.facilities?.slice(0, 3).map((facility, index) => (
-                  <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                    {facility.facilityName}
-                  </span>
-                ))}
-              </div>
-              
-              <Link
-                to={`/rooms/${room.id}`}
-                className="bg-hotel-navy text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors text-sm font-medium"
-              >
-                {t('rooms.viewDetails')}
-              </Link>
+            <div className="room-details">
+              <span className="room-detail">
+                <Users className="w-4 h-4" />
+                Max {room.maxOccupancy} guests
+              </span>
+              <span>
+                {room.position?.replace('_', ' ')}
+              </span>
             </div>
+            
+            {room.description && (
+              <p className="room-description line-clamp-2">
+                {room.description}
+              </p>
+            )}
+          </div>
+          
+          <div className="room-actions">
+            <div className="facilities-list">
+              {room.facilities?.slice(0, 3).map((facility, index) => (
+                <span key={index} className="facility-tag">
+                  {facility.facilityName}
+                </span>
+              ))}
+            </div>
+            
+            <Link
+              to={`/rooms/${room.id}`}
+              className="room-action-primary"
+            >
+              {t('rooms.viewDetails')}
+            </Link>
           </div>
         </div>
       </div>
@@ -430,50 +412,44 @@ const RoomCard = ({ room, viewMode }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
-      <div className="relative">
+    <div className="room-card">
+      <div className="room-image-container">
         <img
           src={roomImage}
           alt={`Room ${room.roomNumber}`}
-          className="w-full h-48 object-cover"
+          className="room-image"
         />
-        <div className="absolute top-4 right-4">
-          <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-            room.isAvailable 
-              ? 'bg-green-100 text-green-800' 
-              : 'bg-red-100 text-red-800'
-          }`}>
-            {room.isAvailable ? 'Available' : 'Unavailable'}
-          </div>
+        <div className={`room-status-badge ${room.isAvailable ? 'room-status-available' : 'room-status-unavailable'}`}>
+          {room.isAvailable ? 'Available' : 'Unavailable'}
         </div>
       </div>
       
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
+      <div className="room-content">
+        <div className="room-header">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="room-title">
               Room {room.roomNumber}
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="room-type">
               {room.roomType?.replace('_', ' ')}
             </p>
           </div>
-          <div className="text-right">
-            <div className="text-xl font-bold text-gray-900">
+          <div className="room-price">
+            <div className="room-price-amount">
               ${room.price}
             </div>
-            <div className="text-xs text-gray-600">per night</div>
+            <div className="room-price-period">per night</div>
           </div>
         </div>
         
-        <p className="text-sm text-gray-600 flex items-center mb-2">
-          <MapPin className="w-4 h-4 mr-1" />
+        <p className="room-location">
+          <MapPin className="w-4 h-4" />
           {room.hotel?.location || 'Location not specified'}
         </p>
         
-        <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
-          <span className="flex items-center">
-            <Users className="w-4 h-4 mr-1" />
+        <div className="room-details">
+          <span className="room-detail">
+            <Users className="w-4 h-4" />
             Max {room.maxOccupancy}
           </span>
           <span>
@@ -482,22 +458,22 @@ const RoomCard = ({ room, viewMode }) => {
         </div>
         
         {room.description && (
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          <p className="room-description line-clamp-2">
             {room.description}
           </p>
         )}
         
         {/* Facilities */}
         {room.facilities && room.facilities.length > 0 && (
-          <div className="mb-4">
-            <div className="flex flex-wrap gap-1">
+          <div className="room-facilities">
+            <div className="facilities-list">
               {room.facilities.slice(0, 3).map((facility, index) => (
-                <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                <span key={index} className="facility-tag">
                   {facility.facilityName}
                 </span>
               ))}
               {room.facilities.length > 3 && (
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-light">
                   +{room.facilities.length - 3} more
                 </span>
               )}
@@ -505,17 +481,17 @@ const RoomCard = ({ room, viewMode }) => {
           </div>
         )}
         
-        <div className="flex space-x-2">
+        <div className="room-actions">
           <Link
             to={`/rooms/${room.id}`}
-            className="flex-1 bg-hotel-navy text-white text-center py-2 px-4 rounded-lg hover:bg-blue-800 transition-colors text-sm font-medium"
+            className="room-action-primary"
           >
             {t('rooms.viewDetails')}
           </Link>
           {room.isAvailable && (
             <Link
               to={`/rooms/${room.id}?book=true`}
-              className="bg-hotel-gold text-hotel-navy py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors text-sm font-medium"
+              className="room-action-secondary"
             >
               {t('rooms.bookNow')}
             </Link>

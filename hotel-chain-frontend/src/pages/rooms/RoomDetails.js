@@ -104,10 +104,10 @@ const RoomDetails = () => {
 
   if (roomLoading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
+      <div className="flex items-center justify-center" style={{ minHeight: '16rem' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">{t('common.loading')}</p>
+          <div className="spinner spinner-lg"></div>
+          <p className="mt-4 text-secondary">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -115,14 +115,16 @@ const RoomDetails = () => {
 
   if (!room) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Room not found</h2>
-        <button
-          onClick={() => navigate('/rooms')}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Back to Rooms
-        </button>
+      <div className="card">
+        <div className="card-body text-center py-12">
+          <h2 className="text-2xl font-bold text-primary mb-4">Room not found</h2>
+          <button
+            onClick={() => navigate('/rooms')}
+            className="btn btn-primary"
+          >
+            Back to Rooms
+          </button>
+        </div>
       </div>
     );
   }
@@ -136,9 +138,9 @@ const RoomDetails = () => {
       {/* Back Button */}
       <button
         onClick={() => navigate('/rooms')}
-        className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+        className="btn btn-ghost"
       >
-        <ArrowLeft className="w-5 h-5 mr-2" />
+        <ArrowLeft className="w-5 h-5" />
         Back to Rooms
       </button>
 
@@ -156,13 +158,13 @@ const RoomDetails = () => {
           <>
             <button
               onClick={prevImage}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-primary-midnight bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-primary-midnight bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -187,290 +189,298 @@ const RoomDetails = () => {
         {/* Room Details */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Info */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  Room {room.roomNumber}
-                </h1>
-                <p className="text-lg text-gray-600 mb-2">
-                  {room.roomType?.replace('_', ' ')}
-                </p>
-                <p className="text-gray-600 flex items-center">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  {room.hotel?.location || 'Location not specified'}
-                </p>
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-gray-900">
-                  ${room.price}
-                  <span className="text-lg font-normal text-gray-600">/night</span>
+          <div className="card">
+            <div className="card-body">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h1 className="text-3xl font-bold text-primary">
+                    Room {room.roomNumber}
+                  </h1>
+                  <p className="text-lg text-secondary mb-2">
+                    {room.roomType?.replace('_', ' ')}
+                  </p>
+                  <p className="text-secondary flex items-center">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    {room.hotel?.location || 'Location not specified'}
+                  </p>
                 </div>
-                <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                  room.isAvailable 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {room.isAvailable ? 'Available' : 'Unavailable'}
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-primary">
+                    ${room.price}
+                    <span className="text-lg font-normal text-secondary">/night</span>
+                  </div>
+                  <div className={`badge ${room.isAvailable ? 'badge-success' : 'badge-error'}`}>
+                    {room.isAvailable ? 'Available' : 'Unavailable'}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Room Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <Users className="w-6 h-6 mx-auto mb-2 text-gray-600" />
-                <div className="text-sm font-medium text-gray-900">Max Guests</div>
-                <div className="text-lg font-bold text-gray-700">{room.maxOccupancy}</div>
-              </div>
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <div className="text-sm font-medium text-gray-900">Position</div>
-                <div className="text-lg font-bold text-gray-700">
-                  {room.position?.replace('_', ' ')}
+              {/* Room Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div className="text-center p-3 bg-secondary rounded-lg">
+                  <Users className="w-6 h-6 mx-auto mb-2 text-primary" />
+                  <div className="text-sm font-medium text-primary">Max Guests</div>
+                  <div className="text-lg font-bold text-secondary">{room.maxOccupancy}</div>
+                </div>
+                <div className="text-center p-3 bg-secondary rounded-lg">
+                  <div className="text-sm font-medium text-primary">Position</div>
+                  <div className="text-lg font-bold text-secondary">
+                    {room.position?.replace('_', ' ')}
+                  </div>
+                </div>
+                <div className="text-center p-3 bg-secondary rounded-lg">
+                  <Star className="w-6 h-6 mx-auto mb-2 text-warning" />
+                  <div className="text-sm font-medium text-primary">Rating</div>
+                  <div className="text-lg font-bold text-secondary">
+                    {averageRating > 0 ? averageRating.toFixed(1) : 'N/A'}
+                  </div>
+                </div>
+                <div className="text-center p-3 bg-secondary rounded-lg">
+                  <MessageCircle className="w-6 h-6 mx-auto mb-2 text-primary" />
+                  <div className="text-sm font-medium text-primary">Reviews</div>
+                  <div className="text-lg font-bold text-secondary">{reviews.length}</div>
                 </div>
               </div>
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <Star className="w-6 h-6 mx-auto mb-2 text-yellow-500" />
-                <div className="text-sm font-medium text-gray-900">Rating</div>
-                <div className="text-lg font-bold text-gray-700">
-                  {averageRating > 0 ? averageRating.toFixed(1) : 'N/A'}
-                </div>
-              </div>
-              <div className="text-center p-3 bg-gray-50 rounded-lg">
-                <MessageCircle className="w-6 h-6 mx-auto mb-2 text-gray-600" />
-                <div className="text-sm font-medium text-gray-900">Reviews</div>
-                <div className="text-lg font-bold text-gray-700">{reviews.length}</div>
-              </div>
-            </div>
 
-            {/* Description */}
-            {room.description && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-600">{room.description}</p>
-              </div>
-            )}
+              {/* Description */}
+              {room.description && (
+                <div>
+                  <h3 className="text-lg font-semibold text-primary mb-2">Description</h3>
+                  <p className="text-secondary">{room.description}</p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Facilities */}
           {room.facilities && room.facilities.length > 0 && (
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('rooms.facilities')}</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {room.facilities.map((facility, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Wifi className="w-4 h-4 text-blue-600" />
+            <div className="card">
+              <div className="card-header">
+                <h3 className="card-title">{t('rooms.facilities')}</h3>
+              </div>
+              <div className="card-body">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {room.facilities.map((facility, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="w-8 h-8 bg-ocean rounded-lg flex items-center justify-center">
+                        <Wifi className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-primary">{facility.facilityName}</div>
+                        {facility.facilityDescription && (
+                          <div className="text-sm text-secondary">{facility.facilityDescription}</div>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-medium text-gray-900">{facility.facilityName}</div>
-                      {facility.facilityDescription && (
-                        <div className="text-sm text-gray-600">{facility.facilityDescription}</div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {/* Reviews */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">{t('reviews.title')}</h3>
-              {averageRating > 0 && (
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-5 h-5 ${
-                          i < Math.floor(averageRating)
-                            ? 'text-yellow-400 fill-current'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
+          <div className="card">
+            <div className="card-header">
+              <div className="flex items-center justify-between">
+                <h3 className="card-title">{t('reviews.title')}</h3>
+                {averageRating > 0 && (
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-5 h-5 ${
+                            i < Math.floor(averageRating)
+                              ? 'text-warning fill-current'
+                              : 'text-light'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm text-secondary">
+                      {averageRating.toFixed(1)} ({reviews.length} reviews)
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-600">
-                    {averageRating.toFixed(1)} ({reviews.length} reviews)
-                  </span>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
-            {reviewsLoading ? (
-              <div className="text-center py-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              </div>
-            ) : reviews.length > 0 ? (
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {reviews.map((review) => (
-                  <div key={review.id} className="border-b border-gray-200 pb-4 last:border-b-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < review.rating
-                                ? 'text-yellow-400 fill-current'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
+            <div className="card-body">
+              {reviewsLoading ? (
+                <div className="text-center py-4">
+                  <div className="spinner"></div>
+                </div>
+              ) : reviews.length > 0 ? (
+                <div className="space-y-4 max-h-96 overflow-y-auto custom-scrollbar">
+                  {reviews.map((review) => (
+                    <div key={review.id} className="border-b border-secondary pb-4 last:border-b-0">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < review.rating
+                                  ? 'text-warning fill-current'
+                                  : 'text-light'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm text-light">
+                          {new Date(review.createdAt).toLocaleDateString()}
+                        </span>
                       </div>
-                      <span className="text-sm text-gray-500">
-                        {new Date(review.createdAt).toLocaleDateString()}
-                      </span>
+                      {review.comment && (
+                        <p className="text-secondary">{review.comment}</p>
+                      )}
                     </div>
-                    {review.comment && (
-                      <p className="text-gray-600">{review.comment}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-600 text-center py-4">{t('reviews.noReviews')}</p>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <p className="text-secondary text-center py-4">{t('reviews.noReviews')}</p>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Booking Form */}
         <div className="lg:col-span-1">
           {room.isAvailable && (
-            <div className="bg-white p-6 rounded-lg shadow-md sticky top-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Book This Room</h3>
+            <div className="card sticky" style={{ top: '1.5rem' }}>
+              <div className="card-header">
+                <h3 className="card-title">Book This Room</h3>
+              </div>
               
-              {!isAuthenticated() ? (
-                <div className="text-center py-4">
-                  <p className="text-gray-600 mb-4">Please login to make a booking</p>
-                  <button
-                    onClick={() => navigate('/login')}
-                    className="w-full bg-hotel-navy text-white py-3 px-4 rounded-lg hover:bg-blue-800 transition-colors font-medium"
-                  >
-                    Login to Book
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit(onBookingSubmit)} className="space-y-4">
-                  {/* Check-in Date */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Check-in Date
-                    </label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        {...register('checkInDate', {
-                          required: 'Check-in date is required',
-                          validate: value => {
-                            const date = new Date(value);
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            return date >= today || 'Check-in date cannot be in the past';
-                          }
-                        })}
-                        type="date"
-                        className={`w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          errors.checkInDate ? 'border-red-300' : 'border-gray-300'
-                        }`}
+              <div className="card-body">
+                {!isAuthenticated() ? (
+                  <div className="text-center py-4">
+                    <p className="text-secondary mb-4">Please login to make a booking</p>
+                    <button
+                      onClick={() => navigate('/login')}
+                      className="btn btn-primary w-full"
+                    >
+                      Login to Book
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit(onBookingSubmit)} className="space-y-4">
+                    {/* Check-in Date */}
+                    <div className="form-group">
+                      <label className="form-label">
+                        Check-in Date
+                      </label>
+                      <div className="input-icon">
+                        <Calendar className="icon" />
+                        <input
+                          {...register('checkInDate', {
+                            required: 'Check-in date is required',
+                            validate: value => {
+                              const date = new Date(value);
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              return date >= today || 'Check-in date cannot be in the past';
+                            }
+                          })}
+                          type="date"
+                          className={`form-input ${errors.checkInDate ? 'error' : ''}`}
+                        />
+                      </div>
+                      {errors.checkInDate && (
+                        <p className="form-error">{errors.checkInDate.message}</p>
+                      )}
+                    </div>
+
+                    {/* Check-out Date */}
+                    <div className="form-group">
+                      <label className="form-label">
+                        Check-out Date
+                      </label>
+                      <div className="input-icon">
+                        <Calendar className="icon" />
+                        <input
+                          {...register('checkOutDate', {
+                            required: 'Check-out date is required',
+                            validate: value => {
+                              const checkInDate = watch('checkInDate');
+                              const checkIn = new Date(checkInDate);
+                              const checkOut = new Date(value);
+                              return checkOut > checkIn || 'Check-out date must be after check-in date';
+                            }
+                          })}
+                          type="date"
+                          className={`form-input ${errors.checkOutDate ? 'error' : ''}`}
+                        />
+                      </div>
+                      {errors.checkOutDate && (
+                        <p className="form-error">{errors.checkOutDate.message}</p>
+                      )}
+                    </div>
+
+                    {/* Special Requests */}
+                    <div className="form-group">
+                      <label className="form-label">
+                        Special Requests (Optional)
+                      </label>
+                      <textarea
+                        {...register('specialRequests')}
+                        rows={3}
+                        className="form-textarea"
+                        placeholder="Any special requirements or requests..."
                       />
                     </div>
-                    {errors.checkInDate && (
-                      <p className="mt-1 text-sm text-red-600">{errors.checkInDate.message}</p>
+
+                    {/* Price Calculation */}
+                    {watch('checkInDate') && watch('checkOutDate') && (
+                      <div className="card" style={{ backgroundColor: 'var(--gray-50)', border: '1px solid var(--gray-200)' }}>
+                        <div className="card-body">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-secondary">Price per night:</span>
+                            <span className="font-medium">${room.price}</span>
+                          </div>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-secondary">
+                              Nights: {(() => {
+                                const checkIn = new Date(watch('checkInDate'));
+                                const checkOut = new Date(watch('checkOutDate'));
+                                const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
+                                return nights;
+                              })()}
+                            </span>
+                            <span className="font-medium">
+                              ${(() => {
+                                const checkIn = new Date(watch('checkInDate'));
+                                const checkOut = new Date(watch('checkOutDate'));
+                                const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
+                                return (nights * room.price).toFixed(2);
+                              })()}
+                            </span>
+                          </div>
+                          <div className="border-t pt-2 flex justify-between items-center font-bold text-lg" style={{ borderColor: 'var(--gray-200)' }}>
+                            <span>Total:</span>
+                            <span>
+                              ${(() => {
+                                const checkIn = new Date(watch('checkInDate'));
+                                const checkOut = new Date(watch('checkOutDate'));
+                                const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
+                                return (nights * room.price).toFixed(2);
+                              })()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     )}
-                  </div>
 
-                  {/* Check-out Date */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Check-out Date
-                    </label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        {...register('checkOutDate', {
-                          required: 'Check-out date is required',
-                          validate: value => {
-                            const checkInDate = watch('checkInDate');
-                            const checkIn = new Date(checkInDate);
-                            const checkOut = new Date(value);
-                            return checkOut > checkIn || 'Check-out date must be after check-in date';
-                          }
-                        })}
-                        type="date"
-                        className={`w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                          errors.checkOutDate ? 'border-red-300' : 'border-gray-300'
-                        }`}
-                      />
-                    </div>
-                    {errors.checkOutDate && (
-                      <p className="mt-1 text-sm text-red-600">{errors.checkOutDate.message}</p>
-                    )}
-                  </div>
-
-                  {/* Special Requests */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Special Requests (Optional)
-                    </label>
-                    <textarea
-                      {...register('specialRequests')}
-                      rows={3}
-                      className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Any special requirements or requests..."
-                    />
-                  </div>
-
-                  {/* Price Calculation */}
-                  {watch('checkInDate') && watch('checkOutDate') && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-gray-600">Price per night:</span>
-                        <span className="font-medium">${room.price}</span>
-                      </div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-gray-600">
-                          Nights: {(() => {
-                            const checkIn = new Date(watch('checkInDate'));
-                            const checkOut = new Date(watch('checkOutDate'));
-                            const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
-                            return nights;
-                          })()}
-                        </span>
-                        <span className="font-medium">
-                          ${(() => {
-                            const checkIn = new Date(watch('checkInDate'));
-                            const checkOut = new Date(watch('checkOutDate'));
-                            const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
-                            return (nights * room.price).toFixed(2);
-                          })()}
-                        </span>
-                      </div>
-                      <div className="border-t pt-2 flex justify-between items-center font-bold text-lg">
-                        <span>Total:</span>
-                        <span>
-                          ${(() => {
-                            const checkIn = new Date(watch('checkInDate'));
-                            const checkOut = new Date(watch('checkOutDate'));
-                            const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
-                            return (nights * room.price).toFixed(2);
-                          })()}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    className="w-full bg-hotel-gold text-hotel-navy py-3 px-4 rounded-lg hover:bg-yellow-500 transition-colors font-medium"
-                  >
-                    Book Now
-                  </button>
-                </form>
-              )}
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      className="btn btn-secondary w-full"
+                    >
+                      Book Now
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
           )}
         </div>

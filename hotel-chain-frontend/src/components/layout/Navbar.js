@@ -61,32 +61,28 @@ const Navbar = () => {
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
   return (
-    <nav className="bg-hotel-navy shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+    <nav className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-content">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-hotel-gold rounded-full flex items-center justify-center">
-              <Bed className="w-5 h-5 text-hotel-navy" />
+          <Link to="/" className="navbar-logo">
+            <div className="logo-icon">
+              <Bed className="w-5 h-5" />
             </div>
-            <span className="text-white text-xl font-bold">Hotel Chain</span>
+            <span className="logo-text">Hotel Chain</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="navbar-desktop">
             {/* Main Navigation */}
-            <div className="flex space-x-6">
+            <div className="navbar-nav">
               {navigation.map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive(item.href)
-                        ? 'bg-hotel-gold text-hotel-navy'
-                        : 'text-white hover:bg-blue-700'
-                    }`}
+                    className={`navbar-nav-item ${isActive(item.href) ? 'active' : ''}`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{item.name}</span>
@@ -101,11 +97,7 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive(item.href)
-                        ? 'bg-hotel-gold text-hotel-navy'
-                        : 'text-white hover:bg-blue-700'
-                    }`}
+                    className={`navbar-nav-item ${isActive(item.href) ? 'active' : ''}`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{item.name}</span>
@@ -120,11 +112,7 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive(item.href)
-                        ? 'bg-hotel-gold text-hotel-navy'
-                        : 'text-white hover:bg-blue-700'
-                    }`}
+                    className={`navbar-nav-item ${isActive(item.href) ? 'active' : ''}`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{item.name}</span>
@@ -134,25 +122,23 @@ const Navbar = () => {
             </div>
 
             {/* Language Selector */}
-            <div className="relative">
+            <div className="language-selector">
               <button
                 onClick={() => setIsLangOpen(!isLangOpen)}
-                className="flex items-center space-x-1 text-white hover:text-hotel-gold transition-colors"
+                className="language-button"
               >
                 <Globe className="w-4 h-4" />
-                <span className="text-sm">{currentLanguage.flag}</span>
+                <span>{currentLanguage.flag}</span>
                 <ChevronDown className="w-3 h-3" />
               </button>
               
               {isLangOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                <div className="language-dropdown">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
                       onClick={() => changeLanguage(lang.code)}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center space-x-2 ${
-                        i18n.language === lang.code ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
-                      }`}
+                      className={`language-option ${i18n.language === lang.code ? 'active' : ''}`}
                     >
                       <span>{lang.flag}</span>
                       <span>{lang.name}</span>
@@ -163,32 +149,32 @@ const Navbar = () => {
             </div>
 
             {/* Auth Buttons */}
-            <div className="flex items-center space-x-4">
+            <div className="navbar-auth">
               {isAuthenticated() ? (
-                <div className="flex items-center space-x-4">
-                  <span className="text-white text-sm">
+                <div className="auth-buttons">
+                  <span className="user-info">
                     {t('common.welcome')}, {currentUser?.firstName || currentUser?.username}
                   </span>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="auth-button auth-button-logout"
                   >
                     <LogOut className="w-4 h-4" />
                     <span>{t('nav.logout')}</span>
                   </button>
                 </div>
               ) : (
-                <div className="flex space-x-2">
+                <div className="auth-buttons">
                   <Link
                     to="/login"
-                    className="flex items-center space-x-1 text-white hover:text-hotel-gold px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="auth-button auth-button-login"
                   >
                     <LogIn className="w-4 h-4" />
                     <span>{t('nav.login')}</span>
                   </Link>
                   <Link
                     to="/register"
-                    className="flex items-center space-x-1 bg-hotel-gold hover:bg-yellow-500 text-hotel-navy px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="auth-button auth-button-register"
                   >
                     <UserPlus className="w-4 h-4" />
                     <span>{t('nav.register')}</span>
@@ -199,10 +185,10 @@ const Navbar = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="mobile-menu-button">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:text-hotel-gold transition-colors"
+              className="mobile-menu-button"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -211,8 +197,8 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-hotel-navy border-t border-blue-800">
+          <div className="navbar-mobile">
+            <div className="mobile-nav-content">
               {/* Main Navigation */}
               {navigation.map((item) => {
                 const Icon = item.icon;
@@ -221,11 +207,7 @@ const Navbar = () => {
                     key={item.name}
                     to={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                      isActive(item.href)
-                        ? 'bg-hotel-gold text-hotel-navy'
-                        : 'text-white hover:bg-blue-700'
-                    }`}
+                    className={`mobile-nav-item ${isActive(item.href) ? 'active' : ''}`}
                   >
                     <Icon className="w-5 h-5" />
                     <span>{item.name}</span>
@@ -241,11 +223,7 @@ const Navbar = () => {
                     key={item.name}
                     to={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                      isActive(item.href)
-                        ? 'bg-hotel-gold text-hotel-navy'
-                        : 'text-white hover:bg-blue-700'
-                    }`}
+                    className={`mobile-nav-item ${isActive(item.href) ? 'active' : ''}`}
                   >
                     <Icon className="w-5 h-5" />
                     <span>{item.name}</span>
@@ -261,11 +239,7 @@ const Navbar = () => {
                     key={item.name}
                     to={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                      isActive(item.href)
-                        ? 'bg-hotel-gold text-hotel-navy'
-                        : 'text-white hover:bg-blue-700'
-                    }`}
+                    className={`mobile-nav-item ${isActive(item.href) ? 'active' : ''}`}
                   >
                     <Icon className="w-5 h-5" />
                     <span>{item.name}</span>
@@ -274,12 +248,12 @@ const Navbar = () => {
               })}
 
               {/* Language Selection */}
-              <div className="px-3 py-2">
-                <div className="text-white text-sm font-medium mb-2 flex items-center space-x-2">
+              <div className="mobile-nav-section">
+                <div className="mobile-nav-title">
                   <Globe className="w-4 h-4" />
                   <span>Language</span>
                 </div>
-                <div className="space-y-1">
+                <div className="mobile-language-options">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
@@ -287,9 +261,7 @@ const Navbar = () => {
                         changeLanguage(lang.code);
                         setIsOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-1 text-sm rounded flex items-center space-x-2 ${
-                        i18n.language === lang.code ? 'bg-hotel-gold text-hotel-navy' : 'text-white hover:bg-blue-700'
-                      }`}
+                      className={`mobile-language-option ${i18n.language === lang.code ? 'active' : ''}`}
                     >
                       <span>{lang.flag}</span>
                       <span>{lang.name}</span>
@@ -299,26 +271,26 @@ const Navbar = () => {
               </div>
 
               {/* Auth Section */}
-              <div className="border-t border-blue-800 pt-4">
+              <div className="mobile-auth-section">
                 {isAuthenticated() ? (
-                  <div className="space-y-2">
-                    <div className="px-3 py-2 text-white text-sm">
+                  <>
+                    <div className="mobile-user-info">
                       {t('common.welcome')}, {currentUser?.firstName || currentUser?.username}
                     </div>
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center space-x-2 px-3 py-2 text-red-300 hover:text-red-100 hover:bg-red-600 rounded-md transition-colors"
+                      className="mobile-auth-button mobile-auth-button-logout"
                     >
                       <LogOut className="w-5 h-5" />
                       <span>{t('nav.logout')}</span>
                     </button>
-                  </div>
+                  </>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="mobile-auth-buttons">
                     <Link
                       to="/login"
                       onClick={() => setIsOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-2 text-white hover:bg-blue-700 rounded-md transition-colors"
+                      className="mobile-auth-button mobile-auth-button-login"
                     >
                       <LogIn className="w-5 h-5" />
                       <span>{t('nav.login')}</span>
@@ -326,7 +298,7 @@ const Navbar = () => {
                     <Link
                       to="/register"
                       onClick={() => setIsOpen(false)}
-                      className="w-full flex items-center space-x-2 px-3 py-2 bg-hotel-gold text-hotel-navy hover:bg-yellow-500 rounded-md transition-colors"
+                      className="mobile-auth-button mobile-auth-button-register"
                     >
                       <UserPlus className="w-5 h-5" />
                       <span>{t('nav.register')}</span>

@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import './i18n';
 import './index.css';
+import './App.css';
 
 // Components
 import Navbar from './components/layout/Navbar';
@@ -36,47 +37,49 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50">
+          <div className="App">
             <Navbar />
-            <main className="container mx-auto px-4 py-8">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/rooms" element={<Rooms />} />
-                <Route path="/rooms/:id" element={<RoomDetails />} />
-                
-                {/* Protected Routes */}
-                <Route 
-                  path="/bookings" 
-                  element={
-                    <ProtectedRoute>
-                      <Bookings />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/reviews" 
-                  element={
-                    <ProtectedRoute>
-                      <Reviews />
-                    </ProtectedRoute>
-                  } 
-                />
-                
-                {/* Admin/Employee/Manager Routes */}
-                <Route 
-                  path="/dashboard" 
-                  element={
-                    <ProtectedRoute roles={['EMPLOYEE', 'MANAGER', 'ADMINISTRATOR']}>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  } 
-                />
-                
-                {/* 404 Route */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+            <main className="main-content-area">
+              <div className="container">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/rooms" element={<Rooms />} />
+                  <Route path="/rooms/:id" element={<RoomDetails />} />
+                  
+                  {/* Protected Routes */}
+                  <Route 
+                    path="/bookings" 
+                    element={
+                      <ProtectedRoute>
+                        <Bookings />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/reviews" 
+                    element={
+                      <ProtectedRoute>
+                        <Reviews />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  
+                  {/* Admin/Employee/Manager Routes */}
+                  <Route 
+                    path="/dashboard" 
+                    element={
+                      <ProtectedRoute roles={['EMPLOYEE', 'MANAGER', 'ADMINISTRATOR']}>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  
+                  {/* 404 Route */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
             </main>
             
             {/* Toast Notifications */}
@@ -85,8 +88,10 @@ function App() {
               toastOptions={{
                 duration: 4000,
                 style: {
-                  background: '#363636',
+                  background: '#1e293b',
                   color: '#fff',
+                  borderRadius: '12px',
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
                 },
                 success: {
                   duration: 3000,

@@ -38,33 +38,31 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="auth-container">
+      <div className="auth-card">
         {/* Header */}
-        <div className="text-center">
-          <div className="w-16 h-16 bg-hotel-gold rounded-full flex items-center justify-center mx-auto mb-4">
-            <LogIn className="w-8 h-8 text-hotel-navy" />
+        <div className="auth-header">
+          <div className="auth-icon">
+            <LogIn className="w-8 h-8" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="auth-title">
             {t('auth.login')}
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="auth-subtitle">
             Sign in to your account to continue
           </p>
         </div>
 
         {/* Login Form */}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4">
+        <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-6">
             {/* Username Field */}
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">
                 {t('auth.username')}
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="input-icon">
+                <User className="icon" />
                 <input
                   {...register('username', {
                     required: 'Username is required',
@@ -74,26 +72,22 @@ const Login = () => {
                     }
                   })}
                   type="text"
-                  className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.username ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`form-input ${errors.username ? 'error' : ''}`}
                   placeholder="Enter your username"
                 />
               </div>
               {errors.username && (
-                <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
+                <p className="form-error">{errors.username.message}</p>
               )}
             </div>
 
             {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
                 {t('auth.password')}
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="input-icon input-icon-right">
+                <Lock className="icon" style={{ left: 'var(--space-3)' }} />
                 <input
                   {...register('password', {
                     required: 'Password is required',
@@ -103,48 +97,51 @@ const Login = () => {
                     }
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  className={`block w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`form-input ${errors.password ? 'error' : ''}`}
                   placeholder="Enter your password"
+                  style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="icon"
+                  style={{ 
+                    right: 'var(--space-3)', 
+                    left: 'auto',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--gray-400)'
+                  }}
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <EyeOff className="w-5 h-5" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <Eye className="w-5 h-5" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="form-error">{errors.password.message}</p>
               )}
             </div>
           </div>
 
           {/* Submit Button */}
-          <div>
+          <div style={{ marginTop: 'var(--space-8)' }}>
             <button
               type="submit"
               disabled={isLoading}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                isLoading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-hotel-navy hover:bg-blue-800'
-              } transition-colors`}
+              className="auth-submit"
             >
               {isLoading ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                <div className="auth-loading">
+                  <div className="spinner"></div>
                   Signing in...
                 </div>
               ) : (
-                <div className="flex items-center">
-                  <LogIn className="w-5 h-5 mr-2" />
+                <div className="auth-loading">
+                  <LogIn className="w-5 h-5" />
                   {t('auth.login')}
                 </div>
               )}
@@ -152,12 +149,12 @@ const Login = () => {
           </div>
 
           {/* Links */}
-          <div className="text-center space-y-2">
-            <p className="text-sm text-gray-600">
+          <div className="auth-links">
+            <p className="text-sm text-secondary">
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                className="auth-link"
               >
                 {t('auth.register')}
               </Link>
@@ -166,22 +163,22 @@ const Login = () => {
         </form>
 
         {/* Demo Accounts */}
-        <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Demo Accounts:</h3>
-          <div className="space-y-2 text-xs text-gray-600">
-            <div className="flex justify-between">
+        <div className="demo-accounts">
+          <h3 className="demo-title">Demo Accounts:</h3>
+          <div className="demo-list">
+            <div className="demo-item">
               <span>Client:</span>
               <span>client/password</span>
             </div>
-            <div className="flex justify-between">
+            <div className="demo-item">
               <span>Employee:</span>
               <span>employee/password</span>
             </div>
-            <div className="flex justify-between">
+            <div className="demo-item">
               <span>Manager:</span>
               <span>manager/password</span>
             </div>
-            <div className="flex justify-between">
+            <div className="demo-item">
               <span>Admin:</span>
               <span>admin/password</span>
             </div>
