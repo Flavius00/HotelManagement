@@ -37,14 +37,7 @@ public class ReviewController {
     public ResponseEntity<List<ReviewDto>> getReviewsForRoom(@PathVariable Long roomId) {
         return ResponseEntity.ok(reviewService.getReviewsForRoom(roomId));
     }
-
-    /**
-     * Obține review-urile pentru un hotel
-     */
-    @GetMapping("/hotel/{hotelId}")
-    public ResponseEntity<List<ReviewDto>> getReviewsForHotel(@PathVariable Long hotelId) {
-        return ResponseEntity.ok(reviewService.getReviewsForHotel(hotelId));
-    }
+    
 
     /**
      * Obține statistici review-uri pentru o cameră

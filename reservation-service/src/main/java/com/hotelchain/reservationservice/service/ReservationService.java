@@ -89,7 +89,7 @@ public class ReservationService {
         jwtValidationService.validateEmployeeRole(token);
 
         String role = jwtValidationService.getRoleFromToken(token);
-        Long employeeHotelId = jwtValidationService.getHotelIdFromToken(token);
+        Long employeeId = jwtValidationService.getUserIdFromToken(token);
 
         List<Reservation> reservations;
 
@@ -97,8 +97,9 @@ public class ReservationService {
             // Admin și Manager pot vedea toate rezervările
             reservations = reservationRepository.findAll();
         } else {
-            // Employee poate vedea doar rezervările pentru hotelul său
-            reservations = reservationRepository.findByEmployeeHotelId(employeeHotelId);
+            // Employee poate vedea doar rezervările pe care le-a făcut el
+            // Alternatively, you could filter by employee ID from the JWT token
+            reservations = reservationRepository.findByEmployeeIdOrderByCreatedAtDesc(employeeId);
         }
 
         return reservations.stream()

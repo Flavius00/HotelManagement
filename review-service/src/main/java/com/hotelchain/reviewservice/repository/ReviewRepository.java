@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,11 +32,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // Găsește toate review-urile active (fără sortare)
     List<Review> findByActiveTrue();
 
-    // Găsește review-urile pentru un hotel (prin room_id și hotel_id din serviciul hotel)
-    @Query("SELECT r FROM Review r WHERE r.roomId IN " +
-            "(SELECT room.id FROM Room room WHERE room.hotelId = :hotelId) " +
+    // Găsește review-urile pentru un hotel prin lista de room IDs
+    // Această metodă va fi folosită cu room IDs obținute din hotel service
+    @Query("SELECT r FROM Review r WHERE r.roomId IN :roomIds " +
             "AND r.active = true ORDER BY r.createdAt DESC")
-    List<Review> findByHotelIdAndActiveTrueOrderByCreatedAtDesc(@Param("hotelId") Long hotelId);
+    List<Review> findByRoomIdsAndActiveTrueOrderByCreatedAtDesc(@Param("roomIds") List<Long> roomIds);
 
     // Statistici - numărul de review-uri din această lună
     @Query("SELECT COUNT(r) FROM Review r WHERE r.active = true " +
@@ -64,9 +65,12 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // Top review-uri (cele mai bine cotate)
     List<Review> findByActiveTrueAndRatingGreaterThanEqualOrderByRatingDescCreatedAtDesc(Integer minRating);
 
-    // Review-urile recente (din ultima săptămână)
+    // Review-urile recente (din ultima săptămână) - FIXED VERSION
     @Query("SELECT r FROM Review r WHERE r.active = true " +
-            "AND r.createdAt >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) " +
+            "AND r.createdAt >= :weekAgo " +
             "ORDER BY r.createdAt DESC")
-    List<Review> findRecentReviews();
+    List<Review> findRecentReviews(@Param("weekAgo") LocalDateTime weekAgo);
+
+    // Alternative method using method name convention (Spring Data will generate the query)
+    List<Review> findByActiveTrueAndCreatedAtGreaterThanEqualOrderByCreatedAtDesc(LocalDateTime weekAgo);
 }

@@ -31,12 +31,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                                                   @Param("checkIn") LocalDate checkIn,
                                                   @Param("checkOut") LocalDate checkOut);
 
-    // Găsește rezervările pentru un hotel specific (prin employee hotel ID)
-    @Query("SELECT r FROM Reservation r " +
-            "JOIN User u ON r.employeeId = u.id " +
-            "WHERE u.hotelId = :hotelId " +
-            "ORDER BY r.createdAt DESC")
-    List<Reservation> findByEmployeeHotelId(@Param("hotelId") Long hotelId);
+    // REMOVED: Cross-service query that was causing the error
+    // This should be handled in the service layer by calling the user-service
+    // List<Reservation> findByEmployeeHotelId(@Param("hotelId") Long hotelId);
 
     // Găsește rezervările dintr-o perioadă specifică
     @Query("SELECT r FROM Reservation r WHERE r.checkInDate >= :startDate AND r.checkInDate <= :endDate")
@@ -50,15 +47,13 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT MONTH(r.checkInDate) as month, COUNT(r) as count " +
             "FROM Reservation r " +
             "WHERE YEAR(r.checkInDate) = :year " +
-            "GROUP BY MONTH(r.checkInDate) " +
-            "ORDER BY month")
+            "GROUP BY MONTH(r.checkInDate) ")
     List<Object[]> getReservationCountByMonth(@Param("year") int year);
 
     // Statistici - venitul total per lună
     @Query("SELECT MONTH(r.checkInDate) as month, SUM(r.totalPrice) as revenue " +
             "FROM Reservation r " +
             "WHERE YEAR(r.checkInDate) = :year AND r.status != 'CANCELLED' " +
-            "GROUP BY MONTH(r.checkInDate) " +
-            "ORDER BY month")
+            "GROUP BY MONTH(r.checkInDate) ")
     List<Object[]> getRevenueByMonth(@Param("year") int year);
 }

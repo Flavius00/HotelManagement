@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,17 +46,6 @@ public class ReviewService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
-
-    /**
-     * Obține toate review-urile pentru un hotel
-     */
-    public List<ReviewDto> getReviewsForHotel(Long hotelId) {
-        List<Review> reviews = reviewRepository.findByHotelIdAndActiveTrueOrderByCreatedAtDesc(hotelId);
-        return reviews.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
     /**
      * Obține statistici review-uri pentru o cameră
      */
@@ -120,6 +110,24 @@ public class ReviewService {
 
         review = reviewRepository.save(review);
         return convertToDto(review);
+    }
+
+    public List<ReviewDto> getRecentReviews() {
+        LocalDateTime weekAgo = LocalDateTime.now().minusWeeks(1);
+        List<Review> reviews = reviewRepository.findRecentReviews(weekAgo);
+        // Alternative: List<Review> reviews = reviewRepository.findByActiveTrueAndCreatedAtGreaterThanEqualOrderByCreatedAtDesc(weekAgo);
+
+        return reviews.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Obține review-urile recente pentru manageri
+     */
+    public List<ReviewDto> getRecentReviews(String token) {
+        jwtValidationService.validateManagerRole(token);
+        return getRecentReviews();
     }
 
     /**
