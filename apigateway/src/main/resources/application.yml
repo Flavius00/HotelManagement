@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+app:
+  services:
+    user: http://localhost:8081
+    hotel: http://localhost:8082
+    reservation: http://localhost:8083
+    review: http://localhost:8084
+
+logging:
+  level:
+    com.hotelchain.gateway: DEBUG

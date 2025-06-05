@@ -1,0 +1,59 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  # Configurări email pentru Hostinger
+  mail:
+    host: ${MAIL_HOST:smtp.hostinger.com}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:dan@web-dev.dev}
+    password: ${MAIL_PASSWORD:u!Z2E1~rc}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            trust: smtp.hostinger.com
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+        debug: true
+
+# Configurări pentru notificări
+sms:
+  api:
+    url: https://smsadvert.ro/api
+    key: ${SMS_API_KEY:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2ZiYWUyMzhmODYyMDAwMDJiMDM2NzcifQ.TWTpn8QkKPwoLgPbJFK6C7QU3DAvEGWSOW4EhMLWfcQ}
+
+mail:
+  from:
+    email: ${MAIL_FROM_EMAIL:dan@web-dev.dev}
+    name: ${MAIL_FROM_NAME:HotelChain}
+
+logging:
+  level:
+    com.hotelchain.userservice: DEBUG
+    com.hotelchain.userservice.service.NotificationService: INFO
+    com.hotelchain.userservice.service.EmailService: INFO
